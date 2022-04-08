@@ -1,8 +1,11 @@
 import React from 'react';
 import Post from "./Post";
 import NewPost from "./NewPost";
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
 const Feed = () => {
+  /*
   const data = [
     {
       "id": 1,
@@ -20,12 +23,26 @@ const Feed = () => {
       "body": "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
     },
   ]
+  */
+  
+  const [data, setData] = useState();
+  const getPostData = () => {
+    axios
+      .get('http://localhost:3002/posts')
+      .then((res) => setData(res.data))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    getPostData();
+    console.log('a');
+  }, []);
 
   return (
     <div style={{ maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto'}}>
       {
-        data.map(d =>
-          <Post title={d.title} body={d.body} key={d.id} />
+        data?.map(d =>
+          <Post title={d.title} body={d.body} comments={d.comments} key={d.id} postId={d.id} />
         )
       }
 
